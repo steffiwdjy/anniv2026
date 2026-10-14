@@ -209,7 +209,7 @@ HTML_TEMPLATE = """
             <!-- Box 2: Memories -->
             <div onclick="openMemories()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-pink-100 text-7xl shadow-inner border border-pink-200">
-                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/fav mem.jpeg" alt="Envelope" class="w-full h-full object-cover">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/fav mem.jpeg" alt="fav" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">Fav Memories</h3>
             </div>
