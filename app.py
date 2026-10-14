@@ -1,237 +1,515 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# Configure the Streamlit page to be wide and hide the default sidebar/menu
-st.set_page_config(page_title="Happy Anniversary", layout="wide", initial_sidebar_state="collapsed")
+# 1. Configure the Streamlit page
+st.set_page_config(page_title="Our Anniversary", layout="wide", initial_sidebar_state="collapsed")
 
-# Hide Streamlit's default headers and footers to make it look like a pure web app
+# 2. Hide Streamlit's default UI elements to make it look like a pure web app
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
-            .stApp {background-color: #111;}
+            .stApp {background-color: #121212;}
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# The exact HTML, CSS, and JS from your web app
+# 3. Your exact HTML, CSS, and JS (with Streamlit static image paths)
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Anniversary 💖</title>
+    
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti for the blind box explosion -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts for typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Share+Tech+Mono&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-light: #fdf2f8;
+        }
+        
         body {
-            margin: 0; padding: 0; background-color: #111; color: white;
-            font-family: 'Courier New', Courier, monospace; display: flex;
-            justify-content: center; align-items: center; height: 95vh;
-            overflow: hidden; flex-direction: column; text-align: center;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling, keep it app-like */
+            background-color: var(--bg-dark);
+            transition: background-color 1s ease;
         }
-        #countdown-screen { display: flex; flex-direction: column; align-items: center; transition: opacity 1s; }
+
+        /* Views management */
+        .view-section {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .view-section.active {
+            display: flex;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Countdown specific styles */
+        .font-mono {
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
         .time-box {
-            display: inline-block; background: #222; border-radius: 10px;
-            padding: 20px; margin: 10px; font-size: 3rem; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 90px;
+            text-align: center;
         }
-        .label { display: block; font-size: 1rem; color: #f39c12; margin-top: 5px; }
-        #main-screen { display: none; flex-direction: column; align-items: center; }
-        .boxes-container { display: flex; gap: 30px; margin-top: 30px; }
-        .gift-box {
-            width: 150px; height: 150px; background: #333; border-radius: 15px;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            transition: transform 0.3s; font-size: 1.2rem; font-weight: bold;
-            text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+
+        @keyframes pulse-text {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
         }
-        .gift-box:hover { transform: scale(1.1); background: #444; }
+        .animate-pulse-text {
+            animation: pulse-text 2s infinite ease-in-out;
+        }
+
+        /* Gift Box styling */
+        .gift-btn {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 16rem;
+        }
+        .gift-btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modals */
         .modal {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); justify-content: center; align-items: center; z-index: 1000;
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
         }
-        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 2rem; cursor: pointer; color: white; z-index: 1001; }
-        #envelope { width: 300px; cursor: pointer; transition: opacity 0.5s; }
-        #classic-letter {
-            display: none; background: #f4e4bc; color: #3e2723; padding: 40px; width: 80%;
-            max-width: 500px; font-family: 'Georgia', serif; font-style: italic;
-            border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.8); line-height: 1.6;
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.4s ease-out;
         }
-        #photo-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+
+        .letter-paper-css {
+            background-color: #f4ece1; /* Parchment base */
+            background-image: repeating-linear-gradient(transparent, transparent 28px, rgba(0,0,0,0.06) 29px);
+            box-shadow: 2px 2px 15px rgba(0,0,0,0.4), inset 0 0 50px rgba(150, 100, 50, 0.15);
+            font-family: 'Caveat', cursive;
+            color: #3e2a1d;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 30px;
+            border-radius: 4px;
+            position: relative;
+            transform: rotate(-1deg);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .letter-paper-css::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 40px; bottom: 0; width: 2px;
+            background: rgba(255, 100, 100, 0.3);
+        }
+
+        /* Polaroid styling */
         .polaroid {
-            position: absolute; width: 150px; padding: 10px 10px 40px 10px; background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.3s; cursor: pointer;
+            background: white;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            position: absolute;
+            transform: rotate(var(--rot)) scale(1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            width: 200px;
         }
-        .polaroid img { width: 100%; height: 130px; object-fit: cover; }
-        .polaroid:hover { z-index: 500 !important; transform: scale(1.5) rotate(0deg) !important; }
-        #blind-box-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .blind-box { width: 120px; cursor: pointer; transition: transform 0.2s; }
-        .blind-box:hover { transform: scale(1.1); }
-        .blind-box img { width: 100%; }
-        #blind-result { display: none; flex-direction: column; align-items: center; }
-        #blind-result img { max-width: 300px; border-radius: 10px; }
-        #blind-result h2 { margin-top: 20px; font-size: 2.5rem; color: #ff6b81; }
+        
+        .polaroid:hover {
+            z-index: 999 !important; 
+            transform: scale(1.6) rotate(0deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+        
+        .polaroid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .mystery-box {
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mystery-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 8px rgba(0,0,0,0.2));
+        }
+        .mystery-box.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+        .mystery-box:not(.disabled):hover {
+            transform: scale(1.15) translateY(-5px);
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
-    <div id="player" style="display:none;"></div>
-    <script src="https://www.youtube.com/iframe_api"></script>
 
-    <div id="countdown-screen">
-        <h1 id="countdown-title">Waiting for Our Special Day...</h1>
-        <div>
-            <div class="time-box"><span id="days">00</span><span class="label">DAYS</span></div>
-            <div class="time-box"><span id="hours">00</span><span class="label">HOURS</span></div>
-            <div class="time-box"><span id="minutes">00</span><span class="label">MINUTES</span></div>
-            <div class="time-box"><span id="seconds">00</span><span class="label">SECONDS</span></div>
-        </div>
-        <div id="click-anywhere" style="display:none; margin-top:30px; cursor:pointer; font-size:1.5rem; color:#f39c12;">
-            (Click Anywhere)
+    <!-- Screen 1: Countdown -->
+    <div id="countdown-view" class="view-section active text-white">
+        <h1 class="text-3xl md:text-5xl mb-8 font-semibold tracking-wider text-center px-4">Waiting for Our Special Day...</h1>
+        <div class="flex gap-2 md:gap-6 font-mono text-4xl md:text-6xl">
+            <div class="time-box">
+                <span id="days">00</span>
+                <div class="text-xs md:text-sm text-gray-400 mt-2 tracking-widest uppercase font-sans">Days</div>
+            </div>
+            <div class="time-box">
+                <span id="hours">00</span>
+                <div class="text-xs md:text-sm text-gray-400 mt-2 tracking-widest uppercase font-sans">Hours</div>
+            </div>
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <div class="text-xs md:text-sm text-gray-400 mt-2 tracking-widest uppercase font-sans">Minutes</div>
+            </div>
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <div class="text-xs md:text-sm text-gray-400 mt-2 tracking-widest uppercase font-sans">Seconds</div>
+            </div>
         </div>
     </div>
 
-    <div id="main-screen">
-        <h1>Happy Anniversary! Pick a gift 🎁</h1>
-        <div class="boxes-container">
-            <div class="gift-box" onclick="openModal('modal-1')">Box 1</div>
-            <div class="gift-box" onclick="openModal('modal-2')">Box 2</div>
-            <div class="gift-box" onclick="openModal('modal-3')">Box 3</div>
+    <!-- Screen 2: Click Anywhere Overlay -->
+    <div id="click-anywhere-view" class="view-section bg-black cursor-pointer">
+        <h2 class="text-4xl md:text-6xl text-pink-400 font-bold animate-pulse-text text-center px-4">
+            It's Time! 💖<br><span class="text-2xl md:text-3xl font-normal text-white mt-4 block">Click anywhere to open your gifts!</span>
+        </h2>
+    </div>
+
+    <!-- Screen 3: Gifts Selection -->
+    <div id="gifts-view" class="view-section" style="background-color: var(--bg-light);">
+        <h2 class="text-3xl md:text-5xl font-bold text-gray-800 mb-12 text-center px-4">Happy Anniversary! Pick a gift 🎁</h2>
+        
+        <div class="flex flex-col md:flex-row gap-8 items-center justify-center w-full px-4 max-w-6xl">
+            
+            <!-- Box 1: Love Letter -->
+            <div onclick="openLetter()" class="gift-btn">
+                <div class="h-48 w-full rounded-lg overflow-hidden mb-4 border border-gray-100 flex items-center justify-center bg-gray-50">
+                    <!-- Adjusted for Streamlit static serving -->
+                    <img src="/app/static/image_9c4a77.jpg" alt="Envelope" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700">A Letter for You</h3>
+            </div>
+
+            <!-- Box 2: Memories -->
+            <div onclick="openMemories()" class="gift-btn">
+                <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-pink-100 text-7xl shadow-inner border border-pink-200">
+                    📸
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700">Fav Memories</h3>
+            </div>
+
+            <!-- Box 3: Blind Boxes -->
+            <div onclick="openBlindBoxes()" class="gift-btn">
+                <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-purple-50 p-4 shadow-inner border border-purple-100">
+                    <!-- Adjusted for Streamlit static serving -->
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700">Blind Boxes</h3>
+            </div>
+
         </div>
     </div>
 
-    <div id="modal-1" class="modal">
-        <div class="close-btn" onclick="closeModal('modal-1')">&times;</div>
-        <img id="envelope" src="/app/static/image_9c4a77.jpg" onclick="openLetter()" alt="Envelope">
-        <div id="classic-letter">
-            My Dearest,<br><br>
-            Happy Anniversary! Thank you for every single moment we've shared. You mean the world to me.<br><br>
-            Forever yours,<br>
-            Steffi
+    <!-- Modal: Love Letter -->
+    <div id="modal-letter" class="modal" onclick="closeModal(event, 'modal-letter')">
+        <div class="letter-paper-css" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('modal-letter').classList.remove('active')" class="absolute top-2 right-4 text-4xl text-gray-800 hover:text-black font-sans">&times;</button>
+            
+            <div class="pl-8 pt-4">
+                <h2 class="text-4xl mb-4">My Dearest,</h2>
+                <p class="text-2xl leading-relaxed">
+                    Happy Anniversary! ❤️ Time feels like it stops when I'm with you, yet the days fly by so fast. 
+                    Thank you for being my rock, my safe place, and my favorite adventure. <br><br>
+                    Here's to the beautiful memories we've made, the ones we are making today, and the millions 
+                    more we will make in the future. You mean the world to me, and I love you more than words can ever truly express.
+                </p>
+                <p class="text-3xl mt-8 font-bold text-right pr-4">Love, Steffi</p>
+            </div>
         </div>
     </div>
 
-    <div id="modal-2" class="modal">
-        <div class="close-btn" onclick="closeModal('modal-2'); stopMusic();">&times;</div>
-        <div id="photo-container"></div>
+    <!-- Modal: Memories -->
+    <div id="modal-memories" class="modal" onclick="closeModal(event, 'modal-memories')" style="background: rgba(15, 15, 15, 0.98);">
+        <button onclick="closeMemoriesModal()" class="absolute top-6 right-8 text-5xl text-white hover:text-gray-300 z-[2000]">&times;</button>
+        <!-- YouTube Audio Embed -->
+        <iframe id="youtube-player" class="hidden" width="0" height="0" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        
+        <!-- Container for messy polaroids -->
+        <div id="polaroid-container" class="relative w-full h-full overflow-hidden" onclick="event.stopPropagation()">
+            <!-- Polaroids dynamically injected via JavaScript -->
+        </div>
     </div>
 
-    <div id="modal-3" class="modal">
-        <div class="close-btn" onclick="closeModal('modal-3')">&times;</div>
-        <div id="blind-box-container">
-            <div class="blind-box" onclick="chooseBlindBox('deep hug', '/app/static/hug.jpg')">
-                <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp">
-            </div>
-            <div class="blind-box" onclick="chooseBlindBox('ZONK', '/app/static/zonk.jpg')">
-                <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp">
-            </div>
-            <div class="blind-box" onclick="chooseBlindBox('PINCH', '/app/static/pinch.jpg')">
-                <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp">
-            </div>
-            <div class="blind-box" onclick="chooseBlindBox('pat pat', '/app/static/pat pat.gif')">
-                <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp">
-            </div>
-            <div class="blind-box" onclick="chooseBlindBox('kisseu', '/app/static/s.jpg')">
-                <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp">
+    <!-- Modal: Blind Boxes Selection -->
+    <div id="modal-blind-boxes" class="modal" onclick="closeModal(event, 'modal-blind-boxes')">
+        <div class="bg-white p-8 rounded-2xl max-w-5xl w-[90%] text-center relative shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('modal-blind-boxes').classList.remove('active')" class="absolute top-4 right-4 text-4xl text-gray-500 hover:text-black">&times;</button>
+            <h2 class="text-4xl font-bold text-gray-800 mb-2">Pick ONE Mystery Box!</h2>
+            <p class="text-gray-500 mb-10 text-xl font-medium">Choose carefully... what will you get? 👀</p>
+            
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8" id="blind-box-container">
+                <div class="mystery-box box-choice" onclick="selectBlindBox(1)">
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 1">
+                </div>
+                <div class="mystery-box box-choice" onclick="selectBlindBox(2)">
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 2">
+                </div>
+                <div class="mystery-box box-choice" onclick="selectBlindBox(3)">
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 3">
+                </div>
+                <div class="mystery-box box-choice" onclick="selectBlindBox(4)">
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 4">
+                </div>
+                <div class="mystery-box box-choice" onclick="selectBlindBox(5)">
+                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 5">
+                </div>
             </div>
         </div>
-        <div id="blind-result">
-            <img id="result-img" src="">
-            <h2 id="result-text"></h2>
+    </div>
+
+    <!-- Modal: Blind Box Result -->
+    <div id="modal-blind-result" class="modal">
+        <div class="bg-white p-6 rounded-3xl max-w-sm w-[90%] text-center shadow-[0_0_40px_rgba(255,105,180,0.4)] relative border-4 border-pink-100">
+            <h2 class="text-3xl font-extrabold text-pink-600 mb-4 uppercase tracking-widest" id="result-title">Title</h2>
+            <div class="w-full bg-gray-50 rounded-xl mb-6 overflow-hidden flex items-center justify-center p-2 border-2 border-dashed border-pink-200">
+                <img id="result-img" src="" alt="Result" class="w-full h-auto object-contain rounded-lg max-h-64">
+            </div>
+            <button onclick="document.getElementById('modal-blind-result').classList.remove('active')" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 text-lg w-full shadow-lg">Claim It! 💖</button>
         </div>
     </div>
 
     <script>
-        const targetDate = new Date("Oct 14, 2026 00:00:00").getTime();
-        
-        const countdownInterval = setInterval(() => {
+        // Set Target Date exactly to Oct 07, 2026, 0:00 AM
+        const targetDate = new Date("Oct 07, 2026 00:00:00").getTime();
+        let timerInterval;
+        let blindBoxClaimed = false;
+
+        // Data for the 5 boxes EXACTLY as requested (adjusted for Streamlit static serving)
+        const blindBoxData = {
+            1: { img: '/app/static/hug.jpg', text: 'deep hug' },
+            2: { img: '/app/static/zonk.jpg', text: 'ZONK' },
+            3: { img: '/app/static/pinch.jpg', text: 'PINCH' },
+            4: { img: '/app/static/pat pat.gif', text: 'pat pat' },
+            5: { img: '/app/static/s.jpg', text: 'kisseu' }
+        };
+
+        function initApp() {
+            updateTimer(); 
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Allow bypassing countdown if user clicks anywhere when active
+            document.getElementById('click-anywhere-view').addEventListener('click', () => {
+                document.getElementById('click-anywhere-view').classList.remove('active');
+                document.getElementById('gifts-view').classList.add('active');
+                document.body.style.backgroundColor = 'var(--bg-light)';
+            });
+        }
+
+        function updateTimer() {
             const now = new Date().getTime();
             const distance = targetDate - now;
 
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById('countdown-title').innerText = "It's Time!";
-                document.getElementById('days').innerText = "00";
-                document.getElementById('hours').innerText = "00";
-                document.getElementById('minutes').innerText = "00";
-                document.getElementById('seconds').innerText = "00";
+            if (distance <= 0) {
+                // Countdown complete!
+                clearInterval(timerInterval);
+                document.getElementById('countdown-view').classList.remove('active');
                 
-                const clickText = document.getElementById('click-anywhere');
-                clickText.style.display = "block";
-                
-                document.body.onclick = function() {
-                    document.getElementById('countdown-screen').style.display = "none";
-                    document.getElementById('main-screen').style.display = "flex";
-                    document.body.onclick = null; 
-                };
-            } else {
-                document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-                document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-                document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-                document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+                // Show click anywhere screen
+                if(!document.getElementById('gifts-view').classList.contains('active')) {
+                    document.getElementById('click-anywhere-view').classList.add('active');
+                    document.body.style.backgroundColor = '#000000';
+                }
+                return;
             }
-        }, 1000);
 
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-            if(id === 'modal-2') triggerMemories();
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
         }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
+
         function openLetter() {
-            document.getElementById('envelope').style.display = 'none';
-            document.getElementById('classic-letter').style.display = 'block';
+            document.getElementById('modal-letter').classList.add('active');
         }
 
-        let ytPlayer;
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('player', {
-                height: '0', width: '0',
-                videoId: 'SctrVF37GAQ', 
-                playerVars: { 'autoplay': 0, 'controls': 0 }
-            });
-        }
-        function triggerMemories() {
-            if(ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo();
-            const container = document.getElementById('photo-container');
-            container.innerHTML = ""; 
+        function openMemories() {
+            const modal = document.getElementById('modal-memories');
+            const container = document.getElementById('polaroid-container');
+            const player = document.getElementById('youtube-player');
             
-            for(let i=1; i<=15; i++) {
-                let div = document.createElement('div');
-                div.className = 'polaroid';
-                div.innerHTML = `<img src="/app/static/photo${i}.jpg" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i}'">`;
-                
-                let rotation = (Math.random() * 60) - 30; 
-                let x = (Math.random() * 60) - 30; 
-                let y = (Math.random() * 60) - 30; 
-                let z = Math.floor(Math.random() * 10);
-                
-                div.style.transform = `translate(${x}vw, ${y}vh) rotate(${rotation}deg)`;
-                div.style.zIndex = z;
-                container.appendChild(div);
+            modal.classList.add('active');
+            
+            // Start YouTube Audio exactly as requested
+            player.src = 'https://www.youtube.com/embed/SctrVF37GAQ?autoplay=1';
+
+            // Generate 15 polaroids using reliable placehold.co to ensure NO empty pictures
+            if (container.children.length === 0) {
+                for (let i = 1; i <= 15; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'polaroid';
+                    
+                    // Random placement (safe bounds) and random rotation
+                    const left = Math.random() * 70 + 5; // 5% to 75%
+                    const top = Math.random() * 65 + 5;  // 5% to 70%
+                    const rot = Math.random() * 80 - 40; // -40deg to +40deg
+
+                    el.style.left = left + '%';
+                    el.style.top = top + '%';
+                    el.style.setProperty('--rot', rot + 'deg');
+                    el.style.zIndex = i;
+                    
+                    // Ensure the hover state brings it cleanly to front via JS event listeners alongside CSS
+                    el.onmouseenter = function() { this.style.zIndex = 1000; };
+                    el.onmouseleave = function() { this.style.zIndex = i; };
+
+                    const img = document.createElement('img');
+                    // Reliable placeholder so it ALWAYS shows an image
+                    img.src = `https://placehold.co/300x400/fbcfe8/be185d?text=Memory+${i}`;
+                    img.alt = 'Memory ' + i;
+                    
+                    const caption = document.createElement('div');
+                    caption.className = 'text-center mt-3 text-sm font-semibold text-gray-700 font-sans';
+                    caption.innerText = 'Memory ' + i;
+
+                    el.appendChild(img);
+                    el.appendChild(caption);
+                    container.appendChild(el);
+                }
             }
         }
-        function stopMusic() {
-            if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+
+        function closeMemoriesModal() {
+            document.getElementById('modal-memories').classList.remove('active');
+            document.getElementById('youtube-player').src = ''; // Stop video/music
         }
 
-        let blindBoxChosen = false;
-        function chooseBlindBox(text, imgSrc) {
-            if(blindBoxChosen) return; 
-            blindBoxChosen = true;
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        function openBlindBoxes() {
+            document.getElementById('modal-blind-boxes').classList.add('active');
+        }
 
+        function selectBlindBox(boxNumber) {
+            if (blindBoxClaimed) return;
+            blindBoxClaimed = true; 
+
+            // Disable all other boxes visually
+            const boxes = document.querySelectorAll('.box-choice');
+            boxes.forEach(box => box.classList.add('disabled'));
+
+            // Fire Canvas Confetti Animation
+            const duration = 2000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 7,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff69b4', '#ff1493', '#ffb6c1']
+                });
+                confetti({
+                    particleCount: 7,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff69b4', '#ff1493', '#ffb6c1']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+            
+            // Wait a second to enjoy confetti before showing result
             setTimeout(() => {
-                document.getElementById('blind-box-container').style.display = 'none';
-                document.getElementById('result-img').src = imgSrc;
-                document.getElementById('result-text').innerText = text;
-                document.getElementById('blind-result').style.display = 'flex';
-            }, 500);
+                document.getElementById('modal-blind-boxes').classList.remove('active');
+                
+                const data = blindBoxData[boxNumber];
+                document.getElementById('result-title').innerText = data.text;
+                // EXACT IMAGE PATH VERBATIM
+                document.getElementById('result-img').src = data.img;
+                
+                document.getElementById('modal-blind-result').classList.add('active');
+            }, 1200); 
         }
+
+        function closeModal(event, modalId) {
+            if(event.target.id === modalId) {
+                document.getElementById(modalId).classList.remove('active');
+                if(modalId === 'modal-memories') {
+                    closeMemoriesModal();
+                }
+            }
+        }
+
+        // Start initialization
+        window.onload = initApp;
     </script>
 </body>
 </html>
 """
 
-# Render the HTML directly inside Streamlit
-components.html(HTML_TEMPLATE, height=850, scrolling=False)
+# 4. Render the HTML using Streamlit Components
+# Setting a large height and scrolling=False ensures the full-screen effect works
+components.html(HTML_TEMPLATE, height=900, scrolling=False)
