@@ -15,7 +15,7 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# 3. Your exact HTML, CSS, and JS (with updated Streamlit static image paths)
+# 3. Your exact HTML, CSS, and JS (with Streamlit static image paths)
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -240,6 +240,7 @@ HTML_TEMPLATE = """
             <!-- Box 1: Love Letter -->
             <div onclick="openLetter()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 border border-gray-100 flex items-center justify-center bg-gray-50">
+                    <!-- Adjusted for Streamlit static serving -->
                     <img src="/app/static/image_9c4a77.jpg" alt="Envelope" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">A Letter for You</h3>
@@ -253,9 +254,10 @@ HTML_TEMPLATE = """
                 <h3 class="text-xl font-semibold text-gray-700">Fav Memories</h3>
             </div>
 
-            <!-- Box 3: Blind Boxes (Updated image reference) -->
+            <!-- Box 3: Blind Boxes -->
             <div onclick="openBlindBoxes()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-purple-50 p-4 shadow-inner border border-purple-100">
+                    <!-- Adjusted for Streamlit static serving -->
                     <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">Blind Boxes</h3>
@@ -294,7 +296,7 @@ HTML_TEMPLATE = """
         </div>
     </div>
 
-    <!-- Modal: Blind Boxes Selection (Updated image reference) -->
+    <!-- Modal: Blind Boxes Selection -->
     <div id="modal-blind-boxes" class="modal" onclick="closeModal(event, 'modal-blind-boxes')">
         <div class="bg-white p-8 rounded-2xl max-w-5xl w-[90%] text-center relative shadow-2xl" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modal-blind-boxes').classList.remove('active')" class="absolute top-4 right-4 text-4xl text-gray-500 hover:text-black">&times;</button>
@@ -338,9 +340,9 @@ HTML_TEMPLATE = """
         let timerInterval;
         let blindBoxClaimed = false;
 
-        // Data for the 5 boxes EXACTLY as requested (adjusted with new  filenames)
+        // Data for the 5 boxes EXACTLY as requested (adjusted for Streamlit static serving)
         const blindBoxData = {
-            1: { img: 'hug.jpg', text: 'deep hug' },
+            1: { img: '/app/static/hug.jpg', text: 'deep hug' },
             2: { img: '/app/static/zonk.jpg', text: 'ZONK' },
             3: { img: '/app/static/pinch.jpg', text: 'PINCH' },
             4: { img: '/app/static/pat pat.gif', text: 'pat pat' },
@@ -485,6 +487,7 @@ HTML_TEMPLATE = """
                 
                 const data = blindBoxData[boxNumber];
                 document.getElementById('result-title').innerText = data.text;
+                // EXACT IMAGE PATH VERBATIM
                 document.getElementById('result-img').src = data.img;
                 
                 document.getElementById('modal-blind-result').classList.add('active');
