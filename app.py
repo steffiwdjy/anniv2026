@@ -15,7 +15,7 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# 3. Your exact HTML, CSS, and JS (with Streamlit static image paths)
+# 3. HTML, CSS, and JS (with images pointing to your raw GitHub links)
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -41,22 +41,16 @@ HTML_TEMPLATE = """
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrolling, keep it app-like */
+            overflow: hidden;
             background-color: var(--bg-dark);
             transition: background-color 1s ease;
         }
 
-        /* Views management */
         .view-section {
             display: none;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
         .view-section.active {
@@ -69,10 +63,7 @@ HTML_TEMPLATE = """
             to { opacity: 1; }
         }
 
-        /* Countdown specific styles */
-        .font-mono {
-            font-family: 'Share Tech Mono', monospace;
-        }
+        .font-mono { font-family: 'Share Tech Mono', monospace; }
         
         .time-box {
             background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
@@ -88,11 +79,8 @@ HTML_TEMPLATE = """
             50% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(1); opacity: 0.8; }
         }
-        .animate-pulse-text {
-            animation: pulse-text 2s infinite ease-in-out;
-        }
+        .animate-pulse-text { animation: pulse-text 2s infinite ease-in-out; }
 
-        /* Gift Box styling */
         .gift-btn {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
@@ -110,15 +98,12 @@ HTML_TEMPLATE = """
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Modals */
         .modal {
             display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             z-index: 100;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; align-items: center;
         }
         .modal.active {
             display: flex;
@@ -126,7 +111,7 @@ HTML_TEMPLATE = """
         }
 
         .letter-paper-css {
-            background-color: #f4ece1; /* Parchment base */
+            background-color: #f4ece1;
             background-image: repeating-linear-gradient(transparent, transparent 28px, rgba(0,0,0,0.06) 29px);
             box-shadow: 2px 2px 15px rgba(0,0,0,0.4), inset 0 0 50px rgba(150, 100, 50, 0.15);
             font-family: 'Caveat', cursive;
@@ -140,15 +125,12 @@ HTML_TEMPLATE = """
             max-height: 90vh;
             overflow-y: auto;
         }
-
         .letter-paper-css::before {
             content: '';
-            position: absolute;
-            top: 0; left: 40px; bottom: 0; width: 2px;
+            position: absolute; top: 0; left: 40px; bottom: 0; width: 2px;
             background: rgba(255, 100, 100, 0.3);
         }
 
-        /* Polaroid styling */
         .polaroid {
             background: white;
             padding: 10px 10px 40px 10px;
@@ -159,44 +141,23 @@ HTML_TEMPLATE = """
             cursor: pointer;
             width: 200px;
         }
-        
         .polaroid:hover {
             z-index: 999 !important; 
             transform: scale(1.6) rotate(0deg);
             box-shadow: 0 15px 30px rgba(0,0,0,0.6);
         }
-        
-        .polaroid img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background-color: #eee;
-        }
+        .polaroid img { width: 100%; height: 200px; object-fit: cover; background-color: #eee; }
 
         .mystery-box {
-            width: 140px;
-            height: 140px;
-            cursor: pointer;
+            width: 140px; height: 140px; cursor: pointer;
             transition: transform 0.2s, filter 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
         .mystery-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 8px rgba(0,0,0,0.2));
+            width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 8px rgba(0,0,0,0.2));
         }
-        .mystery-box.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            filter: grayscale(100%);
-        }
-        .mystery-box:not(.disabled):hover {
-            transform: scale(1.15) translateY(-5px);
-            filter: brightness(1.1);
-        }
+        .mystery-box.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(100%); }
+        .mystery-box:not(.disabled):hover { transform: scale(1.15) translateY(-5px); filter: brightness(1.1); }
     </style>
 </head>
 <body>
@@ -237,11 +198,10 @@ HTML_TEMPLATE = """
         
         <div class="flex flex-col md:flex-row gap-8 items-center justify-center w-full px-4 max-w-6xl">
             
-            <!-- Box 1: Love Letter -->
+            <!-- Box 1: Love Letter (Raw GitHub URL) -->
             <div onclick="openLetter()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 border border-gray-100 flex items-center justify-center bg-gray-50">
-                    <!-- Adjusted for Streamlit static serving -->
-                    <img src="/app/static/image_9c4a77.jpg" alt="Envelope" class="w-full h-full object-cover">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/image_9c4a77.jpg" alt="Envelope" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">A Letter for You</h3>
             </div>
@@ -254,11 +214,10 @@ HTML_TEMPLATE = """
                 <h3 class="text-xl font-semibold text-gray-700">Fav Memories</h3>
             </div>
 
-            <!-- Box 3: Blind Boxes -->
+            <!-- Box 3: Blind Boxes (Raw GitHub URL) -->
             <div onclick="openBlindBoxes()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-purple-50 p-4 shadow-inner border border-purple-100">
-                    <!-- Adjusted for Streamlit static serving -->
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">Blind Boxes</h3>
             </div>
@@ -270,7 +229,6 @@ HTML_TEMPLATE = """
     <div id="modal-letter" class="modal" onclick="closeModal(event, 'modal-letter')">
         <div class="letter-paper-css" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modal-letter').classList.remove('active')" class="absolute top-2 right-4 text-4xl text-gray-800 hover:text-black font-sans">&times;</button>
-            
             <div class="pl-8 pt-4">
                 <h2 class="text-4xl mb-4">My Dearest,</h2>
                 <p class="text-2xl leading-relaxed">
@@ -287,16 +245,11 @@ HTML_TEMPLATE = """
     <!-- Modal: Memories -->
     <div id="modal-memories" class="modal" onclick="closeModal(event, 'modal-memories')" style="background: rgba(15, 15, 15, 0.98);">
         <button onclick="closeMemoriesModal()" class="absolute top-6 right-8 text-5xl text-white hover:text-gray-300 z-[2000]">&times;</button>
-        <!-- YouTube Audio Embed -->
         <iframe id="youtube-player" class="hidden" width="0" height="0" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        
-        <!-- Container for messy polaroids -->
-        <div id="polaroid-container" class="relative w-full h-full overflow-hidden" onclick="event.stopPropagation()">
-            <!-- Polaroids dynamically injected via JavaScript -->
-        </div>
+        <div id="polaroid-container" class="relative w-full h-full overflow-hidden" onclick="event.stopPropagation()"></div>
     </div>
 
-    <!-- Modal: Blind Boxes Selection -->
+    <!-- Modal: Blind Boxes Selection (Raw GitHub URLs) -->
     <div id="modal-blind-boxes" class="modal" onclick="closeModal(event, 'modal-blind-boxes')">
         <div class="bg-white p-8 rounded-2xl max-w-5xl w-[90%] text-center relative shadow-2xl" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modal-blind-boxes').classList.remove('active')" class="absolute top-4 right-4 text-4xl text-gray-500 hover:text-black">&times;</button>
@@ -305,19 +258,19 @@ HTML_TEMPLATE = """
             
             <div class="flex flex-wrap justify-center gap-4 md:gap-8" id="blind-box-container">
                 <div class="mystery-box box-choice" onclick="selectBlindBox(1)">
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 1">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 1">
                 </div>
                 <div class="mystery-box box-choice" onclick="selectBlindBox(2)">
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 2">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 2">
                 </div>
                 <div class="mystery-box box-choice" onclick="selectBlindBox(3)">
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 3">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 3">
                 </div>
                 <div class="mystery-box box-choice" onclick="selectBlindBox(4)">
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 4">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 4">
                 </div>
                 <div class="mystery-box box-choice" onclick="selectBlindBox(5)">
-                    <img src="/app/static/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 5">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Box 5">
                 </div>
             </div>
         </div>
@@ -335,25 +288,24 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
-        // Set Target Date exactly to Oct 07, 2026, 0:00 AM
-        const targetDate = new Date("Oct 07, 2026 00:00:00").getTime();
+        const targetDate = new Date("Oct 17, 2026 00:00:00").getTime();
         let timerInterval;
         let blindBoxClaimed = false;
 
-        // Data for the 5 boxes EXACTLY as requested (adjusted for Streamlit static serving)
+        // Uses RAW GitHub URLs ensuring they load correctly on Streamlit Cloud
+        // Notice the extensions match your GitHub screenshot exactly (.gif)
         const blindBoxData = {
-            1: { img: '/app/static/hug.jpg', text: 'deep hug' },
-            2: { img: '/app/static/zonk.jpg', text: 'ZONK' },
-            3: { img: '/app/static/pinch.jpg', text: 'PINCH' },
-            4: { img: '/app/static/pat pat.gif', text: 'pat pat' },
-            5: { img: '/app/static/s.jpg', text: 'kisseu' }
+            1: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/hug.gif', text: 'deep hug' },
+            2: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/zonk.gif', text: 'ZONK' },
+            3: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pinch.gif', text: 'PINCH' },
+            4: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pat%20pat.gif', text: 'pat pat' },
+            5: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/s.gif', text: 'kisseu' }
         };
 
         function initApp() {
             updateTimer(); 
             timerInterval = setInterval(updateTimer, 1000);
             
-            // Allow bypassing countdown if user clicks anywhere when active
             document.getElementById('click-anywhere-view').addEventListener('click', () => {
                 document.getElementById('click-anywhere-view').classList.remove('active');
                 document.getElementById('gifts-view').classList.add('active');
@@ -366,11 +318,8 @@ HTML_TEMPLATE = """
             const distance = targetDate - now;
 
             if (distance <= 0) {
-                // Countdown complete!
                 clearInterval(timerInterval);
                 document.getElementById('countdown-view').classList.remove('active');
-                
-                // Show click anywhere screen
                 if(!document.getElementById('gifts-view').classList.contains('active')) {
                     document.getElementById('click-anywhere-view').classList.add('active');
                     document.body.style.backgroundColor = '#000000';
@@ -399,32 +348,26 @@ HTML_TEMPLATE = """
             const player = document.getElementById('youtube-player');
             
             modal.classList.add('active');
-            
-            // Start YouTube Audio exactly as requested
             player.src = 'https://www.youtube.com/embed/SctrVF37GAQ?autoplay=1';
 
-            // Generate 15 polaroids using reliable placehold.co to ensure NO empty pictures
             if (container.children.length === 0) {
                 for (let i = 1; i <= 15; i++) {
                     const el = document.createElement('div');
                     el.className = 'polaroid';
                     
-                    // Random placement (safe bounds) and random rotation
-                    const left = Math.random() * 70 + 5; // 5% to 75%
-                    const top = Math.random() * 65 + 5;  // 5% to 70%
-                    const rot = Math.random() * 80 - 40; // -40deg to +40deg
+                    const left = Math.random() * 70 + 5;
+                    const top = Math.random() * 65 + 5;
+                    const rot = Math.random() * 80 - 40;
 
                     el.style.left = left + '%';
                     el.style.top = top + '%';
                     el.style.setProperty('--rot', rot + 'deg');
                     el.style.zIndex = i;
                     
-                    // Ensure the hover state brings it cleanly to front via JS event listeners alongside CSS
                     el.onmouseenter = function() { this.style.zIndex = 1000; };
                     el.onmouseleave = function() { this.style.zIndex = i; };
 
                     const img = document.createElement('img');
-                    // Reliable placeholder so it ALWAYS shows an image
                     img.src = `https://placehold.co/300x400/fbcfe8/be185d?text=Memory+${i}`;
                     img.alt = 'Memory ' + i;
                     
@@ -441,7 +384,7 @@ HTML_TEMPLATE = """
 
         function closeMemoriesModal() {
             document.getElementById('modal-memories').classList.remove('active');
-            document.getElementById('youtube-player').src = ''; // Stop video/music
+            document.getElementById('youtube-player').src = '';
         }
 
         function openBlindBoxes() {
@@ -452,42 +395,26 @@ HTML_TEMPLATE = """
             if (blindBoxClaimed) return;
             blindBoxClaimed = true; 
 
-            // Disable all other boxes visually
             const boxes = document.querySelectorAll('.box-choice');
             boxes.forEach(box => box.classList.add('disabled'));
 
-            // Fire Canvas Confetti Animation
             const duration = 2000;
             const end = Date.now() + duration;
 
             (function frame() {
-                confetti({
-                    particleCount: 7,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#ff69b4', '#ff1493', '#ffb6c1']
-                });
-                confetti({
-                    particleCount: 7,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#ff69b4', '#ff1493', '#ffb6c1']
-                });
+                confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ff1493', '#ffb6c1'] });
+                confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ff1493', '#ffb6c1'] });
 
                 if (Date.now() < end) {
                     requestAnimationFrame(frame);
                 }
             }());
             
-            // Wait a second to enjoy confetti before showing result
             setTimeout(() => {
                 document.getElementById('modal-blind-boxes').classList.remove('active');
                 
                 const data = blindBoxData[boxNumber];
                 document.getElementById('result-title').innerText = data.text;
-                // EXACT IMAGE PATH VERBATIM
                 document.getElementById('result-img').src = data.img;
                 
                 document.getElementById('modal-blind-result').classList.add('active');
@@ -503,13 +430,10 @@ HTML_TEMPLATE = """
             }
         }
 
-        // Start initialization
         window.onload = initApp;
     </script>
 </body>
 </html>
 """
 
-# 4. Render the HTML using Streamlit Components
-# Setting a large height and scrolling=False ensures the full-screen effect works
 components.html(HTML_TEMPLATE, height=900, scrolling=False)
