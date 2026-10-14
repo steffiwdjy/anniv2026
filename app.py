@@ -141,7 +141,7 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
-        const targetDate = new Date("Oct 17, 2026 00:00:00").getTime();
+        const targetDate = new Date("Oct 14, 2026 00:00:00").getTime();
         
         const countdownInterval = setInterval(() => {
             const now = new Date().getTime();
