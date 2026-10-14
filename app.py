@@ -201,7 +201,7 @@ HTML_TEMPLATE = """
             <!-- Box 1: Love Letter (Raw GitHub URL) -->
             <div onclick="openLetter()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 border border-gray-100 flex items-center justify-center bg-gray-50">
-                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/image_9c4a77.jpg" alt="Envelope" class="w-full h-full object-cover">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/envelope.jpg" alt="Envelope" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">A Letter for You</h3>
             </div>
@@ -217,7 +217,7 @@ HTML_TEMPLATE = """
             <!-- Box 3: Blind Boxes (Raw GitHub URL) -->
             <div onclick="openBlindBoxes()" class="gift-btn">
                 <div class="h-48 w-full rounded-lg overflow-hidden mb-4 flex items-center justify-center bg-purple-50 p-4 shadow-inner border border-purple-100">
-                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/pink-gift-box-with-gold-ribbon-on-transparent-background-png.webp" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
+                    <img src="https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/blind_box.png" alt="Blind Box" class="w-full h-full object-contain hover:scale-110 transition-transform">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700">Blind Boxes</h3>
             </div>
