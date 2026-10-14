@@ -137,7 +137,7 @@ HTML_TEMPLATE = """
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
             position: absolute;
             transform: rotate(var(--rot)) scale(1);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.4s cubic-bezier(0.5, 0.885, 0.32, 1.275);
             cursor: pointer;
             width: 200px;
         }
@@ -288,7 +288,7 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
-        const targetDate = new Date("Oct 17, 2026 00:00:00").getTime();
+        const targetDate = new Date("Oct 14, 2026 00:00:00").getTime();
         let timerInterval;
         let blindBoxClaimed = false;
 
