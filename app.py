@@ -340,7 +340,7 @@ HTML_TEMPLATE = """
 
         // Data for the 5 boxes EXACTLY as requested (adjusted with new  filenames)
         const blindBoxData = {
-            1: { img: '/app/static/hug.jpg', text: 'deep hug' },
+            1: { img: 'hug.jpg', text: 'deep hug' },
             2: { img: '/app/static/zonk.jpg', text: 'ZONK' },
             3: { img: '/app/static/pinch.jpg', text: 'PINCH' },
             4: { img: '/app/static/pat pat.gif', text: 'pat pat' },
