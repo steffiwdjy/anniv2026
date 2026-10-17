@@ -194,7 +194,7 @@ HTML_TEMPLATE = """
 
     <!-- Screen 3: Gifts Selection -->
     <div id="gifts-view" class="view-section" style="background-color: var(--bg-light);">
-        <h2 class="text-3xl md:text-5xl font-bold text-gray-800 mb-12 text-center px-4">Happy Anniversary! Pick a gift 🎁</h2>
+        <h2 class="text-3xl md:text-5xl font-bold text-gray-800 mb-12 text-center px-4">Happy Anniversary! Here's special gifs only for u 💖🎁</h2>
         
         <div class="flex flex-col md:flex-row gap-8 items-center justify-center w-full px-4 max-w-6xl">
             
@@ -230,7 +230,7 @@ HTML_TEMPLATE = """
         <div class="letter-paper-css" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modal-letter').classList.remove('active')" class="absolute top-2 right-4 text-4xl text-gray-800 hover:text-black font-sans">&times;</button>
             <div class="pl-8 pt-4">
-                <h2 class="text-4xl mb-4">Happy Anniv Ma Lopli Baobeeiii! ❤️,</h2>
+                <h2 class="text-4xl mb-4">Happy Anniv Ma Lopli Baobeeiii! ❤️</h2>
                 <p class="text-2xl leading-relaxed">
                     yeaayyyy enippp ><, gaa kerasaa jugaa yaaa udaa setaonn ajaa kiteuu xD.
                     maacihh yaaa udaa selaluu adaa buatt tepii, membuat tepii merasa disayanggg, selaluu makluminn tepii n terima tepii apaa adanyaa,
