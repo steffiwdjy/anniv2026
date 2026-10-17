@@ -294,7 +294,7 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
-        const targetDate = new Date("Oct 14, 2026 00:00:00").getTime();
+        const targetDate = new Date("Oct 18, 2026 00:00:00").getTime();
         let timerInterval;
         let blindBoxClaimed = false;
 
@@ -314,7 +314,7 @@ HTML_TEMPLATE = """
             2: "our third date? xD",
             3: "timezone date yipii ><",
             4: "timezone date yipii ><",
-            5: "in this photo i feel like u maybe start to lop mw? 👀",
+            5: "in this photo i feel like u maybe start to lop me? 👀",
             6: "charada date🍖, actually i start feel really luf u here  ><",
             7: "charada date🍖",
             8: "charada date 🍖",
