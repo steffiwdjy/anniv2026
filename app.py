@@ -302,6 +302,43 @@ HTML_TEMPLATE = """
             5: { img: 'https://raw.githubusercontent.com/steffiwdjy/anniv2026/main/s.gif', text: 'kisseu' }
         };
 
+        // Adjustable captions for each photo (1 through 33)
+        const memoryCaptions = {
+            1: "i lop yu",
+            2: "cayang",
+            3: "my favorite person",
+            4: "cutie pie",
+            5: "sweet moments",
+            6: "date night",
+            7: "always you",
+            8: "bubu & dudu",
+            9: "warm hugs",
+            10: "silly times",
+            11: "happy smiles",
+            12: "making memories",
+            13: "forever with you",
+            14: "my happy place",
+            15: "endless love",
+            16: "best adventure",
+            17: "lovey dovey",
+            18: "little moments",
+            19: "you & me",
+            20: "precious memory",
+            21: "my sunshine",
+            22: "sweetest days",
+            23: "stay close",
+            24: "heart full of you",
+            25: "cherished times",
+            26: "snuggle time",
+            27: "laughing with you",
+            28: "my safe harbor",
+            29: "unconditional",
+            30: "pure happiness",
+            31: "my universe",
+            32: "to more days like this",
+            33: "forever & always"
+        };
+
         function initApp() {
             updateTimer(); 
             timerInterval = setInterval(updateTimer, 1000);
@@ -351,7 +388,7 @@ HTML_TEMPLATE = """
             player.src = 'https://www.youtube.com/embed/SctrVF37GAQ?autoplay=1';
 
             if (container.children.length === 0) {
-                for (let i = 1; i <= 34; i++) {
+                for (let i = 1; i <= 33; i++) {
                     const el = document.createElement('div');
                     el.className = 'polaroid';
                     
@@ -373,7 +410,7 @@ HTML_TEMPLATE = """
                     
                     const caption = document.createElement('div');
                     caption.className = 'text-center mt-3 text-sm font-semibold text-gray-700 font-sans';
-                    caption.innerText = 'Memory ' + i;
+                    caption.innerText = memoryCaptions[i] || ('Memory ' + i);
 
                     el.appendChild(img);
                     el.appendChild(caption);
