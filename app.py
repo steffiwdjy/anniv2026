@@ -327,16 +327,16 @@ HTML_TEMPLATE = """
             21: "our first christmas together 🎄✨",
             22: "our first christmas together 🎄✨",
             23: "TSM date 🤩",
-            24: "heart full of you",
-            25: "cherished times",
-            26: "snuggle time",
-            27: "laughing with you",
-            28: "my safe harbor",
-            29: "unconditional",
-            30: "pure happiness",
-            31: "my universe",
-            32: "to more days like this",
-            33: "forever & always"
+            24: "photobooth date on valentine's day 💖",
+            25: "photobooth date on valentine's day 💖",
+            26: "photobooth date on valentine's day 💖",
+            27: "mercusuar date, first date using car w/ u ><",
+            28: "ur second bday with me 🤩",
+            29: "ur second bday with me 🤩",
+            30: "ma paporit photo of us ><🥰",
+            31: "ma paporit photo of us ><🥰",
+            32: "ma paporit photo of us ><🥰",
+            33: "ur second bday with me"
         };
 
         function initApp() {
