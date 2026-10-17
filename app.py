@@ -230,14 +230,20 @@ HTML_TEMPLATE = """
         <div class="letter-paper-css" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modal-letter').classList.remove('active')" class="absolute top-2 right-4 text-4xl text-gray-800 hover:text-black font-sans">&times;</button>
             <div class="pl-8 pt-4">
-                <h2 class="text-4xl mb-4">My Dearest,</h2>
+                <h2 class="text-4xl mb-4">Happy Anniv Ma Lopli Baobeeiii! ❤️,</h2>
                 <p class="text-2xl leading-relaxed">
-                    Happy Anniversary! ❤️ Time feels like it stops when I'm with you, yet the days fly by so fast. 
-                    Thank you for being my rock, my safe place, and my favorite adventure. <br><br>
-                    Here's to the beautiful memories we've made, the ones we are making today, and the millions 
-                    more we will make in the future. You mean the world to me, and I love you more than words can ever truly express.
+                    yeaayyyy enippp ><, gaa kerasaa jugaa yaaa udaa setaonn ajaa kiteuu xD.
+                    maacihh yaaa udaa selaluu adaa buatt tepii, membuat tepii merasa disayanggg, selaluu makluminn tepii n terima tepii apaa adanyaa,
+                    maacihh udaa selalu mauu mendengarkan dan mengusahakan tepiii 🥺🤧
+                    maacihh jugaa udaa selaluu mau menjadi orang yang lebih baik setiap harinyaa untukk tepii 🥹🥰
+                    tepiii sayaaaaangggg buangeedd amaa cahh cahhh,, sangaddd bersyukurr punyaa u 🤧
+                    tepii harap kitaa akann selaluu akurr, salingg sayanggg terusss selamanyaa,, jann sampee ada orang yang bisa ato bahkan mempengaruhi hubungan kita untuk terpecah yaaa 🥺
+                    tepii jugaa berharapp kitaa bisaa lebii banyakk abisin waktu bersamaa,, qttttttt+++,, tapi tetep produktifff xD,, mari mengkayahh bersamahh 🤑💰
+                    pokonyaaa maacihh banyaakk banyaaaakk for eperitingg nyakk ><
+                    lopyuuuu pollll baobeeeiiiii (つ｡˃ ᵕ ˂)つ ⸝♡
+                    looking forward to every anniversary until death parts us ⸜(｡˃ ᵕ ˂ )⸝♡
                 </p>
-                <p class="text-3xl mt-8 font-bold text-right pr-4">Love, Steffi</p>
+                <p class="text-3xl mt-8 font-bold text-right pr-4">Love, ur fav person :P</p>
             </div>
         </div>
     </div>
@@ -309,7 +315,7 @@ HTML_TEMPLATE = """
             3: "timezone date yipii ><",
             4: "timezone date yipii ><",
             5: "in this photo i feel like u maybe start to lop mw? 👀",
-            6: "charada date🍖, actually i start feel really luf u here ><",
+            6: "charada date🍖, actually i start feel really luf u here  ><",
             7: "charada date🍖",
             8: "charada date 🍖",
             9: "random date at IP xD",
